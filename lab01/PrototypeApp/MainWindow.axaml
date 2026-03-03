@@ -1,0 +1,208 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="PrototypeApp.MainWindow"
+        Title="Notes"
+        Width="1100" Height="750"
+        Background="#FFFFFF"
+        x:DataType="ViewModels:MainWindowViewModel"
+        xmlns:ViewModels="using:PrototypeApp.ViewModels">
+
+    <Grid ColumnDefinitions="300,1,*">
+        
+        <!-- 🔹 Левая панель -->
+        <Border Grid.Column="0" Background="#F5F5F7" BorderBrush="#E5E5EA" BorderThickness="0,0,1,0">
+            <Grid RowDefinitions="Auto,*,Auto">
+                
+                <!-- Создание -->
+                <Border Grid.Row="0" Padding="20,20,20,15" BorderBrush="#E5E5EA" BorderThickness="0,0,0,1">
+                    <StackPanel Spacing="10">
+                        <TextBox Name="TitleInput" 
+                                 Watermark="Название заметки"
+                                 Classes="ModernInput"/>
+                        <Grid ColumnDefinitions="*,*">
+                            <Button Grid.Column="0" Content="Текст" 
+                                    Command="{Binding CreateTextNoteCommand}"
+                                    CommandParameter="{Binding Text, ElementName=TitleInput}"
+                                    Classes="ModernButton Primary"
+                                    Margin="0,0,5,0"/>
+                            <Button Grid.Column="1" Content="Задачи" 
+                                    Command="{Binding CreateTasksNoteCommand}"
+                                    CommandParameter="{Binding Text, ElementName=TitleInput}"
+                                    Classes="ModernButton Success"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Скролл с папками -->
+                <ScrollViewer Grid.Row="1" Padding="15,15,15,0">
+                    <StackPanel Spacing="20">
+                        
+                        <!-- 📁 Текстовые заметки -->
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="📄 Текстовые заметки" 
+                                       FontWeight="SemiBold" 
+                                       FontSize="13"
+                                       Foreground="#6E6E73"
+                                       Margin="5,0,0,5"/>
+                            <ListBox ItemsSource="{Binding TextNotes}"
+                                     SelectedItem="{Binding SelectedNote}"
+                                     Classes="NoteList">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Classes="NoteCard">
+                                            <StackPanel Spacing="4">
+                                                <TextBlock Text="{Binding Title}" 
+                                                           FontWeight="SemiBold"
+                                                           TextTrimming="CharacterEllipsis"/>
+                                                <!-- ✅ Исправлено: PreviewText вместо Content -->
+                                                <TextBlock Text="{Binding PreviewText}" 
+                                                           FontSize="12" 
+                                                           Foreground="#8E8E93"
+                                                           TextTrimming="CharacterEllipsis"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+
+                        <!-- 📁 Заметки с задачами -->
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="📋 Заметки с задачами" 
+                                       FontWeight="SemiBold" 
+                                       FontSize="13"
+                                       Foreground="#6E6E73"
+                                       Margin="5,0,0,5"/>
+                            <ListBox ItemsSource="{Binding TaskNotes}"
+                                     SelectedItem="{Binding SelectedNote}"
+                                     Classes="NoteList">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Classes="NoteCard">
+                                            <StackPanel Spacing="4">
+                                                <TextBlock Text="{Binding Title}" 
+                                                           FontWeight="SemiBold"
+                                                           TextTrimming="CharacterEllipsis"/>
+                                                <!-- ✅ Исправлено: PreviewText вместо TaskNames.Count -->
+                                                <TextBlock Text="{Binding PreviewText}" 
+                                                           FontSize="12" 
+                                                           Foreground="#8E8E93"
+                                                           TextTrimming="CharacterEllipsis"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Действия -->
+                <Border Grid.Row="2" Padding="20,15,20,20" BorderBrush="#E5E5EA" BorderThickness="0,1,0,0">
+                    <Grid ColumnDefinitions="*,*">
+                        <Button Grid.Column="0" Content="Клонировать" 
+                                Command="{Binding CloneSelectedCommand}"
+                                Classes="ModernButton Warning"
+                                Margin="0,0,5,0"/>
+                        <Button Grid.Column="1" Content="Удалить" 
+                                Command="{Binding DeleteNoteCommand}"
+                                Classes="ModernButton Danger"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- 🔹 Правая панель -->
+        <Border Grid.Column="2" Background="White">
+            <Grid RowDefinitions="Auto,*,Auto" Margin="40,30,40,30">
+                
+                <!-- Заголовок -->
+                <StackPanel Grid.Row="0" Spacing="6">
+                    <TextBlock Text="{Binding SelectedNote.Title}" 
+                               FontSize="28" 
+                               FontWeight="Bold"
+                               TextTrimming="CharacterEllipsis"/>
+                    <StackPanel Orientation="Horizontal" Spacing="20">
+                        <TextBlock Text="{Binding SelectedNote.CreatedAt, StringFormat='Создано: {0:dd.MM.yyyy HH:mm}'}" 
+                                   Foreground="#8E8E93"
+                                   FontSize="13"/>
+                        <TextBlock Text="{Binding SelectedNote.UpdatedAt, StringFormat='Изменено: {0:dd.MM.yyyy HH:mm}'}" 
+                                   Foreground="#8E8E93"
+                                   FontSize="13"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- TextNote контент -->
+                <StackPanel Grid.Row="1" 
+                            IsVisible="{Binding IsTextNoteSelected}"
+                            Spacing="15">
+                    <TextBox Text="{Binding SelectedTextContent, Mode=TwoWay}" 
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             Classes="ModernInput"
+                             MinHeight="300"/>
+                    <Button Content="Сохранить" 
+                            Command="{Binding SaveEditCommand}"
+                            Classes="ModernButton Primary"
+                            HorizontalAlignment="Left"
+                            Width="120"/>
+                </StackPanel>
+
+                <!-- TasksNote контент -->
+                <StackPanel Grid.Row="1" 
+                            IsVisible="{Binding IsTasksNoteSelected}"
+                            Spacing="15">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBox Grid.Column="0" 
+                                 Name="NewTaskInput" 
+                                 Watermark="Добавить задачу..."
+                                 Classes="ModernInput"
+                                 Margin="0,0,10,0"/>
+                        <Button Grid.Column="1" 
+                                Content="Добавить" 
+                                Command="{Binding AddTaskCommand}"
+                                CommandParameter="{Binding Text, ElementName=NewTaskInput}"
+                                Classes="ModernButton Success"
+                                Width="100"/>
+                    </Grid>
+                    
+                    <Border Classes="TaskList">
+                        <ListBox ItemsSource="{Binding CurrentTaskItems}" 
+                                 MaxHeight="400">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding Name}" 
+                                              IsChecked="{Binding Done, Mode=TwoWay}"
+                                              Margin="0,8"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Border>
+                </StackPanel>
+
+                <!-- Пустое состояние -->
+                <StackPanel Grid.Row="1" 
+                            IsVisible="{Binding SelectedNote, Converter={x:Static ObjectConverters.IsNull}}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Spacing="10">
+                    <TextBlock Text="📝" FontSize="48" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Выберите заметку" 
+                               Foreground="#8E8E93"
+                               FontSize="16"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Футер -->
+                <Border Grid.Row="2" 
+                        Classes="Footer"
+                        Margin="0,30,0,0">
+                    <TextBlock Text="Prototype Pattern — создание объектов через клонирование"
+                               TextAlignment="Center"
+                               Foreground="#8E8E93"
+                               FontSize="12"/>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
