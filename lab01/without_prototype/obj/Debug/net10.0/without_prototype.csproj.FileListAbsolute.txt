@@ -1,0 +1,15 @@
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\bin\Debug\net10.0\without_prototype.exe
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\bin\Debug\net10.0\without_prototype.deps.json
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\bin\Debug\net10.0\without_prototype.runtimeconfig.json
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\bin\Debug\net10.0\without_prototype.dll
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\bin\Debug\net10.0\without_prototype.pdb
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\obj\Debug\net10.0\without_prototype.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\obj\Debug\net10.0\without_prototype.AssemblyInfoInputs.cache
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\obj\Debug\net10.0\without_prototype.AssemblyInfo.cs
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\obj\Debug\net10.0\without_prototype.csproj.CoreCompileInputs.cache
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\obj\Debug\net10.0\without_prototype.sourcelink.json
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\obj\Debug\net10.0\without_prototype.dll
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\obj\Debug\net10.0\refint\without_prototype.dll
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\obj\Debug\net10.0\without_prototype.pdb
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\obj\Debug\net10.0\without_prototype.genruntimeconfig.cache
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\without_prototype\obj\Debug\net10.0\ref\without_prototype.dll

@@ -30,7 +30,6 @@ namespace WithoutPrototypeApp.Models
             };
         }
 
-        // ✅ Свойство вместо метода
         public string PreviewText => $"{TaskNames.Count} задач";
     }
 }

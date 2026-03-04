@@ -23,7 +23,6 @@ namespace PrototypeApp.Models
             };
         }
 
-        // ✅ Реализация превью
         public override string PreviewText => 
             string.IsNullOrEmpty(Content) ? "Нет содержимого" : Content;
     }

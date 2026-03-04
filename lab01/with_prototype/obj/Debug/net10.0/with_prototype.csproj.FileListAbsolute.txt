@@ -1,0 +1,15 @@
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\bin\Debug\net10.0\with_prototype.exe
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\bin\Debug\net10.0\with_prototype.deps.json
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\bin\Debug\net10.0\with_prototype.runtimeconfig.json
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\bin\Debug\net10.0\with_prototype.dll
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\bin\Debug\net10.0\with_prototype.pdb
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\obj\Debug\net10.0\with_prototype.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\obj\Debug\net10.0\with_prototype.AssemblyInfoInputs.cache
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\obj\Debug\net10.0\with_prototype.AssemblyInfo.cs
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\obj\Debug\net10.0\with_prototype.csproj.CoreCompileInputs.cache
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\obj\Debug\net10.0\with_prototype.sourcelink.json
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\obj\Debug\net10.0\with_prototype.dll
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\obj\Debug\net10.0\refint\with_prototype.dll
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\obj\Debug\net10.0\with_prototype.pdb
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\obj\Debug\net10.0\with_prototype.genruntimeconfig.cache
+C:\Users\Peter\OneDrive\Desktop\GitHub Projects\Object-oriented-analysis-and-design-2\lab01\with_prototype\obj\Debug\net10.0\ref\with_prototype.dll

@@ -27,7 +27,6 @@ namespace PrototypeApp.Models
             };
         }
 
-        // ✅ Реализация превью
         public override string PreviewText => $"{TaskNames.Count} задач";
     }
 }
