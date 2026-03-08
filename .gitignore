@@ -1,2 +1,6 @@
-.vscode/
 *sln
+.DS_Store
+build/
+.vscode/
+*.exe
+*.out
