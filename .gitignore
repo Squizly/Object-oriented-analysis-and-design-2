@@ -1,2 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+
+# IDE (Visual Studio / VS Code)
 .vscode/
-*sln
+.vs/
+Debug/
+Release/
+x64/
+obj/
+*.user
+*.suo
+
+# Файлы данных (чтобы случайно не залить базу на 500 строк, если не хочешь)
+*.xlsx
+*.txt
+!README.md
+
