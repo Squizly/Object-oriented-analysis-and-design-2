@@ -68,7 +68,8 @@ class NoPatternApp(QMainWindow):
         lbl_input = QLabel("Текст для рендера:")
         lbl_input.setObjectName("Header")
         self.input_field = QLineEdit()
-        self.input_field.setText("Flyweight Pattern: Maximum Efficiency! Minimum Memory! Repeating characters are shared effortlessly.")
+        # Большой текст для проверки
+        self.input_field.setText("Flyweight Pattern: Maximum Efficiency! Minimum Memory! Repeating characters are shared effortlessly. Flyweight Pattern: Maximum Efficiency! Minimum Memory! Repeating characters are shared effortlessly. Flyweight Pattern: Maximum Efficiency! Minimum Memory! Repeating characters are shared effortlessly. This design pattern is perfect for optimizing memory usage when dealing with large numbers of similar objects. Each character object shares its formatting style with other identical characters, dramatically reducing memory consumption. The factory ensures that we never create duplicate objects for the same character with the same style. Instead, we reuse existing objects, saving precious memory resources. This is particularly useful in text editors, graphical applications, and any system that needs to handle large amounts of repetitive data efficiently.")
         
         lbl_font = QLabel("Настройки шрифта:")
         lbl_font.setObjectName("Header")
@@ -104,9 +105,12 @@ class NoPatternApp(QMainWindow):
         
         self.lbl_total = QLabel("Всего символов: 0")
         self.lbl_memory = QLabel("Создано объектов: 0")
-        self.lbl_optimization = QLabel("Сэкономлено памяти: 0")
+        self.lbl_total_memory = QLabel("Всего памяти: 0 байт")
+        self.lbl_avg_memory = QLabel("В среднем на объект: 0 байт")
+        self.lbl_optimization = QLabel("Сэкономлено памяти: 0 байт")
         
-        for lbl in[self.lbl_total, self.lbl_memory, self.lbl_optimization]:
+        for lbl in [self.lbl_total, self.lbl_memory, self.lbl_total_memory, 
+                    self.lbl_avg_memory, self.lbl_optimization]:
             lbl.setObjectName("StatText")
             stats_layout.addWidget(lbl)
 
@@ -136,7 +140,7 @@ class NoPatternApp(QMainWindow):
         self.view = QGraphicsView(self.scene)
         self.view.setRenderHint(self.view.renderHints().Antialiasing)
         
-        lbl_logs = QLabel("📜 Логи C++:")
+        lbl_logs = QLabel("📜 Логи C++ (каждый символ - новый объект!):")
         lbl_logs.setObjectName("Header")
         
         self.log_console = QTextEdit()
@@ -169,6 +173,8 @@ class NoPatternApp(QMainWindow):
         self.scene.clear()
         self.lbl_total.setText("Всего символов: ...")
         self.lbl_memory.setText("Создано объектов: ...")
+        self.lbl_total_memory.setText("Всего памяти: ...")
+        self.lbl_avg_memory.setText("В среднем на объект: ...")
         self.lbl_optimization.setText("Сэкономлено памяти: ...")
         self.lbl_optimization.setStyleSheet("") 
 
@@ -185,7 +191,7 @@ class NoPatternApp(QMainWindow):
         subprocess.run(["g++", "-std=c++17", "main.cpp", "-o", "backend_app"])
         
         # 2. Запускаем
-        run_args =["./backend_app", text, font_name, str(font_size), is_bold_str, step_x, step_y]
+        run_args = ["./backend_app", text, font_name, str(font_size), is_bold_str, step_x, step_y]
         result = subprocess.run(run_args, capture_output=True, text=True)
         
         self.cpp_lines = result.stdout.split('\n')
@@ -203,9 +209,15 @@ class NoPatternApp(QMainWindow):
 
         if not line: return
 
-        # В логах будет только красный цвет, зеленого "Reusing" больше нет!
+        # В логах будет только красный цвет для новых объектов
         if "[Memory] Created NEW" in line:
-            self.log_console.append(f'<span style="color:#f7768e;">{line}</span>')
+            # Извлекаем информацию о памяти
+            match = re.search(r"Memory used: (\d+) bytes", line)
+            if match:
+                memory = match.group(1)
+                self.log_console.append(f'<span style="color:#f7768e;">{line}</span>')
+            else:
+                self.log_console.append(f'<span style="color:#f7768e;">{line}</span>')
         
         elif "-> Drawing:" in line:
             match = re.search(r"Drawing:\s+\[(.*?)\]\s+at\s+([\d\.]+)\s+([\d\.]+)", line)
@@ -218,16 +230,39 @@ class NoPatternApp(QMainWindow):
         elif "Total characters:" in line:
             val = line.split(":")[-1].strip()
             self.lbl_total.setText(f"Всего символов: {val}")
+            
         elif "Objects in memory:" in line:
             val = line.split(":")[-1].strip()
             self.lbl_memory.setText(f"Создано тяжелых объектов: {val}")
             self.lbl_memory.setStyleSheet("color: #f7768e;")
+            
+        elif "Total memory used:" in line:
+            match = re.search(r"(\d+) bytes", line)
+            if match:
+                val = match.group(1)
+                self.lbl_total_memory.setText(f"Всего памяти: {val} байт")
+                self.lbl_total_memory.setStyleSheet("color: #f7768e;")
+                
+        elif "Average per object:" in line:
+            match = re.search(r"(\d+) bytes", line)
+            if match:
+                val = match.group(1)
+                self.lbl_avg_memory.setText(f"В среднем на объект: {val} байт")
+                
         elif "Optimization: Saved" in line:
             match = re.search(r"Saved\s+(\d+)\s+duplicates", line)
             if match:
                 val = match.group(1)
                 self.lbl_optimization.setText(f"Сэкономлено: {val} дубликатов! ❌")
-                self.lbl_optimization.setStyleSheet("color: #f7768e;") 
+                self.lbl_optimization.setStyleSheet("color: #f7768e; font-size: 14px;")
+                
+        elif "Memory wasted:" in line:
+            match = re.search(r"(\d+) bytes", line)
+            if match:
+                val = match.group(1)
+                # Обновляем информацию о wasted памяти (дублируем для наглядности)
+                self.lbl_optimization.setText(f"Потрачено впустую: {val} байт (нет шаринга!)")
+                self.lbl_optimization.setStyleSheet("color: #f7768e; font-size: 14px; font-weight: 900;")
 
         scrollbar = self.log_console.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
@@ -241,12 +276,12 @@ class NoPatternApp(QMainWindow):
         qfont = QFont(font_name, font_size, weight)
 
         text_item = self.scene.addText(char, qfont)
-        text_item.setDefaultTextColor(QColor("#7aa2f7"))
+        text_item.setDefaultTextColor(QColor("#f7768e"))  # Красный цвет для неоптимизированной версии
         text_item.setPos(x, y)
 
         shadow = QGraphicsDropShadowEffect()
         shadow.setBlurRadius(12)
-        shadow.setColor(QColor("#7aa2f7"))
+        shadow.setColor(QColor("#f7768e"))
         shadow.setOffset(0, 0)
         text_item.setGraphicsEffect(shadow)
 

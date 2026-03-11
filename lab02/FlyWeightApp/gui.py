@@ -47,7 +47,7 @@ QTextEdit {
 class FlyweightApp(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Flyweight Pattern - Pro Dashboard")
+        self.setWindowTitle("Flyweight Pattern - Pro Memory Dashboard")
         self.resize(1280, 800)
         self.setMinimumSize(1100, 700)
         self.setStyleSheet(STYLESHEET)
@@ -68,7 +68,7 @@ class FlyweightApp(QMainWindow):
         lbl_input = QLabel("Текст для рендера:")
         lbl_input.setObjectName("Header")
         self.input_field = QLineEdit()
-        self.input_field.setText("Flyweight Pattern: Maximum Efficiency! Minimum Memory! Repeating characters are shared effortlessly.")
+        self.input_field.setText("Flyweight Pattern: Maximum Efficiency! Minimum Memory! Repeating characters are shared effortlessly. Flyweight Pattern: Maximum Efficiency! Minimum Memory! Repeating characters are shared effortlessly. Flyweight Pattern: Maximum Efficiency! Minimum Memory! Repeating characters are shared effortlessly. This design pattern is perfect for optimizing memory usage when dealing with large numbers of similar objects. Each character object shares its formatting style with other identical characters, dramatically reducing memory consumption. The factory ensures that we never create duplicate objects for the same character with the same style. Instead, we reuse existing objects, saving precious memory resources. This is particularly useful in text editors, graphical applications, and any system that needs to handle large amounts of repetitive data efficiently.")
         
         lbl_font = QLabel("Настройки шрифта:")
         lbl_font.setObjectName("Header")
@@ -104,9 +104,12 @@ class FlyweightApp(QMainWindow):
         
         self.lbl_total = QLabel("Всего символов: 0")
         self.lbl_memory = QLabel("Создано объектов: 0")
-        self.lbl_optimization = QLabel("Сэкономлено памяти: 0")
+        self.lbl_actual_memory = QLabel("Фактическая память: 0 байт")
+        self.lbl_theoretical_memory = QLabel("Теоретическая память: 0 байт")
+        self.lbl_optimization = QLabel("Сэкономлено памяти: 0 байт")
         
-        for lbl in [self.lbl_total, self.lbl_memory, self.lbl_optimization]:
+        for lbl in [self.lbl_total, self.lbl_memory, self.lbl_actual_memory, 
+                    self.lbl_theoretical_memory, self.lbl_optimization]:
             lbl.setObjectName("StatText")
             stats_layout.addWidget(lbl)
 
@@ -168,6 +171,8 @@ class FlyweightApp(QMainWindow):
         self.scene.clear()
         self.lbl_total.setText("Всего символов: ...")
         self.lbl_memory.setText("Создано объектов: ...")
+        self.lbl_actual_memory.setText("Фактическая память: ...")
+        self.lbl_theoretical_memory.setText("Теоретическая память: ...")
         self.lbl_optimization.setText("Сэкономлено памяти: ...")
         self.lbl_optimization.setStyleSheet("") 
 
@@ -200,10 +205,26 @@ class FlyweightApp(QMainWindow):
 
         if not line: return
 
-        if "[Memory] Created NEW" in line:
-            self.log_console.append(f'<span style="color:#f7768e;">{line}</span>')
+        if "[Memory] Created NEW Character" in line:
+            # Извлекаем информацию о памяти
+            match = re.search(r"Memory used: (\d+) bytes", line)
+            if match:
+                memory = match.group(1)
+                self.log_console.append(f'<span style="color:#f7768e;">{line}</span>')
+            else:
+                self.log_console.append(f'<span style="color:#f7768e;">{line}</span>')
+                
+        elif "[Memory] Created TextStyle" in line:
+            self.log_console.append(f'<span style="color:#bb9af7;">{line}</span>')
+            
         elif "[Factory] Reusing" in line:
-            self.log_console.append(f'<span style="color:#9ece6a;">{line}</span>')
+            # Извлекаем информацию о сэкономленной памяти
+            match = re.search(r"Saved: (\d+) bytes", line)
+            if match:
+                saved = match.group(1)
+                self.log_console.append(f'<span style="color:#9ece6a;">{line}</span>')
+            else:
+                self.log_console.append(f'<span style="color:#9ece6a;">{line}</span>')
         
         elif "-> Drawing:" in line:
             match = re.search(r"Drawing:\s+\[(.*?)\]\s+at\s+([\d\.]+)\s+([\d\.]+)", line)
@@ -216,15 +237,36 @@ class FlyweightApp(QMainWindow):
         elif "Total characters:" in line:
             val = line.split(":")[-1].strip()
             self.lbl_total.setText(f"Всего символов: {val}")
+            
         elif "Objects in memory:" in line:
             val = line.split(":")[-1].strip()
             self.lbl_memory.setText(f"Создано объектов: {val}")
-        elif "Optimization: Saved" in line:
-            match = re.search(r"Saved\s+(\d+)\s+duplicates", line)
+            
+        elif "Actual memory used:" in line:
+            match = re.search(r"(\d+) bytes", line)
             if match:
                 val = match.group(1)
-                self.lbl_optimization.setText(f"Сэкономлено памяти: {val} дубликатов!")
-                self.lbl_optimization.setStyleSheet("color: #9ece6a; font-size: 16px; font-weight: 900;") 
+                self.lbl_actual_memory.setText(f"Фактическая память: {val} байт")
+                
+        elif "Theoretical memory (without Flyweight):" in line:
+            match = re.search(r"(\d+) bytes", line)
+            if match:
+                val = match.group(1)
+                self.lbl_theoretical_memory.setText(f"Теоретическая память: {val} байт")
+                
+        elif "Memory saved:" in line:
+            match = re.search(r"(\d+) bytes", line)
+            if match:
+                val = match.group(1)
+                self.lbl_optimization.setText(f"Сэкономлено памяти: {val} байт")
+                
+        elif "Optimization:" in line and "bytes saved" in line:
+            match = re.search(r"(\d+) bytes saved \((\d+\.?\d*)%", line)
+            if match:
+                bytes_saved = match.group(1)
+                percent = match.group(2)
+                self.lbl_optimization.setText(f"Сэкономлено памяти: {bytes_saved} байт ({percent}%!)")
+                self.lbl_optimization.setStyleSheet("color: #9ece6a; font-size: 12px; font-weight: 900;")
 
         scrollbar = self.log_console.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
