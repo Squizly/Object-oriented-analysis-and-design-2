@@ -10,7 +10,6 @@ public class Money {
         this.currency = currency.toUpperCase();
     }
 
-    // СЕТТЕРЫ — это корень зла. Они позволяют менять объект "под капотом"
     public void setAmount(BigDecimal amount) { this.amount = amount; }
     public void setCurrency(String currency) { this.currency = currency; }
 

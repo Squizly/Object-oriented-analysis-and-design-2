@@ -34,17 +34,36 @@ public class CurrencyService {
         } catch (SQLException e) { System.err.println("Ошибка трат: " + e.getMessage()); }
     }
 
-    // ГРЯЗНЫЙ МЕТОД: Меняет переданный объект
     public void convertInPlace(Money m, String target) {
-        if (m.getCurrency().equals(target)) return;
+        if (m.getCurrency().equalsIgnoreCase(target)) return;
+        
         double rate = 1.0;
+        boolean found = false;
         for (ExchangeRate r : rates) {
-            if (r.getFrom().equals(m.getCurrency()) && r.getTo().equals(target)) {
-                rate = r.getRate(); break;
+            if (r.getFrom().equalsIgnoreCase(m.getCurrency()) && r.getTo().equalsIgnoreCase(target)) {
+                rate = r.getRate();
+                found = true;
+                break;
             }
         }
-        m.setAmount(m.getAmount().multiply(BigDecimal.valueOf(rate)));
-        m.setCurrency(target);
+        
+        BigDecimal newAmount = m.getAmount().multiply(BigDecimal.valueOf(rate));
+        m.setAmount(newAmount.setScale(2, java.math.RoundingMode.HALF_UP));
+        m.setCurrency(target.toUpperCase());
+        
+        if (!found && !m.getCurrency().equals(target)) {
+            System.err.println("Курс не найден для " + m.getCurrency() + " -> " + target);
+        }
+    }
+
+    public void addInPlace(Money base, Money addition, String target) {
+        convertInPlace(base, target);
+        
+        Money tempAdd = new Money(addition.getAmount(), addition.getCurrency());
+        convertInPlace(tempAdd, target);
+        
+        // Складываем результат в первый объект
+        base.setAmount(base.getAmount().add(tempAdd.getAmount()));
     }
 
     public List<Expense> getExpenses() { return expenses; }

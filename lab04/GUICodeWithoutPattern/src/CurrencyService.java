@@ -34,7 +34,6 @@ public class CurrencyService {
         } catch (SQLException e) { System.err.println("Ошибка трат: " + e.getMessage()); }
     }
 
-    // ГРЯЗНЫЙ МЕТОД: Меняет переданный объект
     public void convertInPlace(Money m, String target) {
         if (m.getCurrency().equals(target)) return;
         double rate = 1.0;

@@ -10,7 +10,7 @@ public class CurrencyService {
 
     public CurrencyService() {
         try {
-            Class.forName("org.sqlite.JDBC"); // ФОРСИРУЕМ ЗАГРУЗКУ ДРАЙВЕРА
+            Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             System.err.println("Драйвер не найден в classpath: " + e.getMessage());
         }
